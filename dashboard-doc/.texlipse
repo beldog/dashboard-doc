@@ -1,0 +1,14 @@
+#TeXlipse project settings
+#Wed Sep 04 23:26:00 CEST 2013
+markTmpDer=true
+builderNum=2
+outputDir=
+makeIndSty=
+bibrefDir=
+outputFormat=pdf
+tempDir=tmp
+mainTexFile=briefing.tex
+outputFile=briefing.pdf
+langSpell=en
+markDer=true
+srcDir=
