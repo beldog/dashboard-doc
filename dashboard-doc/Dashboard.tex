@@ -1,0 +1,101 @@
+% Project:	Dashboard
+% Title:	Dashboard: Track, analyze and decide 
+% Description:	
+% Author:	Héctor López
+
+
+\documentclass[a4paper,12pt,english]{book}
+% Comment the following to have chapters numbered without interruption (numbering through parts)
+%\makeatletter\@addtoreset{chapter}{part}\makeatother%
+
+%
+% Required packages
+%
+\usepackage[english]{babel}		% language
+%\usepackage[latin1]{inputenc}	% para acentos y eñes
+\usepackage{graphicx}			% graphics in jpeg, png or pdf format
+\usepackage{titleref}
+\usepackage{tocbibind}
+\usepackage{hyperref}			% generates PDF links
+\usepackage{multicol}			% for multicolumns
+\usepackage{subfigure}
+\usepackage{multirow}
+\usepackage{listings}			%Sourcecode
+\usepackage[toc,page]{appendix}
+
+\renewcommand{\theTitleReference}[2]{\chaptername{}\ #1:\ \emph{#2}}
+\newcommand{\reffigure}[1]{\figurename{}\ \ref{#1}} 
+
+%
+% Page set up
+%
+%\oddsidemargin -1.0cm
+%\headsep -2.4cm
+%\textwidth=18.5cm
+%\textheight=26cm
+
+\newenvironment{dedication}
+{
+   \cleardoublepage
+   \thispagestyle{empty}
+   \vspace*{\stretch{1}}
+   \hfill\begin{minipage}[t]{0.15\textwidth}
+   \raggedright
+}%
+{
+   \end{minipage}
+   \vspace*{\stretch{3}}
+   \clearpage
+}
+
+%
+% PFC 
+%
+\begin{document}
+
+\title{Dashboard: Track, analyze and decide}
+\author{Héctor López}
+
+\date{\today}
+\maketitle
+
+\begin{dedication}
+A Silvia :)
+\end{dedication}
+
+%\input{portada.tex}
+
+\tableofcontents
+
+% Agradecimientos
+%\newpage
+%\thispagestyle{empty}
+\chapter*{Acknowledgments}
+\addcontentsline{toc}{chapter}{Acknowledgments}
+
+En primer lugar, agradecer la notable aportación de nuestros tutores: JM Gimeno y
+Carles Mateu en el proceso de aprendizaje. En especial la paciencia y dedicación
+de JM Gimeno a este proyecto. \\
+
+
+%
+% Chapters
+%
+
+\input{Dashboard_PhaseOne.tex}
+\input{Dashboard_PhaseTwo.tex}
+\input{Dashboard_PhaseThree.tex}
+%\input{trabajofuturo.tex}
+%\input{conclusiones.tex}
+
+\begin{thebibliography}{1}
+
+	\bibitem{McAfeer06}{McAfeer06} Jeff McAfeer, Jean-Michel Lemieux
+		{\em ``Eclipse Rich Client Platform : designing, coding, and packaging Java
+		applications''}. Addison-Wesley, 2006.
+	\bibitem{RobHa04}{RobHa04} Robert Harris and Rob Warner
+		{\em ``The Definitive Guide to SWT and JFace''}. Apress, 2004.
+	\bibitem{}{}
+\end{thebibliography}
+
+\end{document}

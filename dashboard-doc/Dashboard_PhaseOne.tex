@@ -1,0 +1,209 @@
+\part{Migrate Excel spreadsheet dashboard to a simple REST+HTML/JS
+application}
+\label{c_phaseone}
+
+\chapter*{Motivation}
+\addcontentsline{toc}{chapter}{Motivation}
+In order to track and follow up project's status, we built a simple tool in a
+spreadsheet that linked with a database allowed us to log each change (aka
+\emph{event}) on the project status on the following scope: phase change
+end/start, delay, launch.
+
+This tool also gave us a good view about different selected KPI \footnote{Key
+Performance Indicator}. And based on those indicators we built few reports:
+Project's events, Projects launched, Projects delayed (and detail), Projects
+Gantt and Project's timelines.
+
+The tool was fine for a while, but it took to much time to load all data
+from the database, and also was not fully compatible with all users, because of
+the need to install some extra required components like the ODBC for those with
+Windows, or not even compatible with those using Linux computers, because the
+tool was built on Microsoft Excel.
+
+So, imagine trying to track project's \emph{events} on a tool that is slow
+and not compatible with everybody. At the end we stopped using it.
+
+Then, a fresh motivation came up to build something better,
+usable for all required users and faster enough to aim the objective: track,
+analyze and decide. 
+
+The challenge was there and as well the information on the database, so it was
+just a matter to migrate the spreadsheet (the view) to a HTML page with some JS,
+as first client, so we decople it from any need of 3rd party component such as
+ODBC, having in the middle a RESTful service that
+controls the communication between the client (web browser) and what matters, the data (the model).
+
+\chapter{Current Excel architecture}
+At the beginning, the idea was to have the data centralized
+\label{t_main_objective} and implement, in a fast way, a client that could show
+it. The quicker solution, not always the right one but useful for a while, was
+to define the simpliest database model to  track the maximum amount of events with enough value to evaluate a the
+efficiency of a project and learn from our mistakes. Together with the database
+we setup a Excel spreadsheet that loads the data from the defined database, but
+we also needed to build different reports, so we difined few \emph{views} based
+on the required KPIs, so we could query it from the external spreadsheet
+without define any kind of logic, that could increase the complexity.\\
+
+In short, elements defined are listed as follow:
+\begin{itemize}
+  \item A MySQL database with one table called Events used to store any possible
+  event (previously defined the set of them)
+  \item Few views used to achieve defined reports
+  \item A Microsoft Excel spreadsheet used to show data returned by the views
+  \item One connection per report used to connect Excel with the database
+  via ODBC as data connectivity abstractor. 
+\end{itemize}
+
+You can see the relationship between above listed components on the 
+\reffigure{f_excel_architecture}.
+ 
+\begin{figure}[ht!]
+	\centering
+   	\includegraphics[width=1\textwidth]{./resources/excel_architecture.png}
+   	\caption{Reports architecture using Excel}
+   	\label{f_excel_architecture}
+\end{figure}
+
+\section{Database model}
+Database model was defined as simple as possible, keeping in mind
+possible normalization in the future without having a big impact on the data. So
+decission was to use
+\emph{Enum}\footnote{https://dev.mysql.com/doc/refman/5.0/en/enum.html} data
+type for those fields that are static or with a predefined set of
+elements like: country, project\_type or  type fields
+(\reffigure{f_data_model}).
+
+\begin{figure}[ht!]
+	\centering
+   	\includegraphics[width=1\textwidth]{./resources/data_model.png}
+   	\caption{Data model}
+   	\label{f_data_model}
+\end{figure}
+
+The most relevant field here is \emph{type}, where covers all required possible
+scenarios in a project's lifetime that we needed to track. And base on that, 
+reports (views) can show the specific information to be analyzed.
+
+\section{Views definition and reports}
+As described on the previous sections, we defined five reports, they are:
+
+\begin{itemize}
+  \item Amount of launches, per country and month
+  \item Total project's delay
+  \item Project's delays in detail
+  \item Gantt chart
+  \item Project's timelines chart 
+\end{itemize}
+
+On top of them, we also added an extra report listing all project's events,
+just for our reference.
+
+You can see screenshots on how they look for each of them on
+\reffigure{f_report_launches}, \reffigure{f_report_delays},
+\reffigure{f_report_delays_detail}, \reffigure{f_report_gantt},
+\reffigure{f_report_timelines} and \reffigure{f_report_events}.
+
+\begin{figure}[ht!]
+	\centering
+   	\includegraphics[width=1\textwidth]{./resources/report_launches.png}
+   	\caption{Launches report}
+   	\label{f_report_launches}
+\end{figure}
+\begin{figure}[ht!]
+	\centering
+   	\includegraphics[width=1\textwidth]{./resources/report_delays.png}
+   	\caption{Delays report}
+   	\label{f_report_delays}
+\end{figure}
+\begin{figure}[ht!]
+	\centering
+   	\includegraphics[width=1\textwidth]{./resources/report_delays_detail.png}
+   	\caption{Detailed delays report}
+   	\label{f_report_delays_detail}
+\end{figure}
+\begin{figure}[ht!]
+	\centering
+   	\includegraphics[width=1\textwidth]{./resources/report_gantt.png}
+   	\caption{Gantt report}
+   	\label{f_report_gantt}
+\end{figure}
+\begin{figure}[ht!]
+	\centering
+   	\includegraphics[width=1\textwidth]{./resources/report_timelines.png}
+   	\caption{Timelines report}
+   	\label{f_report_timelines}
+\end{figure}
+\begin{figure}[ht!]
+	\centering
+   	\includegraphics[width=1\textwidth]{./resources/report_events.png}
+   	\caption{Events report}
+   	\label{f_report_events}
+\end{figure}
+
+Each of those reports has defined one or more than one table's view that execute
+the required data calculations and format the output in a Excel friendly way, so
+the spreadsheet just need to show it and doesn't require any customization. 
+
+This data and format coupling on the views definition was done on purpose,
+in order to be flexible enough in the future in case was needed to define a
+different viewer component, a part of the Excel, such as and HTML, or just
+migrate it to a different platform. But, on both case the model could remain
+untouched if the objective remained the same and only is needed to change the
+view with a more powerful or friendly one. See and example on
+\ref{f_report_launchesbymonth}.
+
+\lstinputlisting[language=SQL,breaklines=true,caption=Launches
+by month
+view,label=f_report_launchesbymonth,frame=single,captionpos=b]{resources/report_launchesbymonth.sql}
+
+In the other hand, decoupling it will need to be taken sooner or later if
+we want to have a flexible and scalable tool, but this will be part of the
+future work.
+
+\section{The issue and what to improve}
+As slightly tackle on previous sections, building a reporting tool based on
+Excel was not the better solution, but it covered the main needs, even if we
+faced issues like slowness, a single shared spreadsheet to be used by all
+project managers, every report has a standalone database connection with the
+possible impact on resources it could have and manual database insert per
+each project's event.
+
+All these points will be reviewed and covered on the next chapter. 
+
+\chapter{New RESTful architecture}
+After few time working with the spreadsheet linked with the database, and having
+listed its downsides, I have started thinking about how to improve it without
+affecting the main objective \ref{t_main_objective} but making it more
+user friendly.
+
+We already had listed the weaknesses and thinking on one by one, just came up
+that the main change would be to replace completly the view (Excel), that
+will solve all the issues, but will lose the power of the pivot table and
+filters, but it could be managed in a second or third stage.
+
+Now the question is: what could be the best replacement?
+
+\section{Looking for a view replacement}
+
+
+\chapter{Migration plan}
+
+\chapter{Conclusions}
+
+\chapter{Future work}
+\begin{itemize}
+	\item Refactor database connectivity using a proper JPA based framework.
+  
+	Implement a real database connection pool using one of the existing persistence
+	frameworks that implements JPA\footnote{Java Persistence API:
+	\url{http://www.oracle.com/technetwork/articles/javaee/jpa-137156.html}}.
+	
+	\item Remove data-format coupling returned to the client.
+	\item Refactor client making it usable for the final user (requires assessment
+	and evaluation of main actions to carry out by the user).
+\end{itemize}
+
+%\begin{appendices}
+%\chapter{Table views reports}
+%\lstinputlisting[language=SQL,breaklines=true]{resources/reports_views.sql}
+%\end{appendices}
