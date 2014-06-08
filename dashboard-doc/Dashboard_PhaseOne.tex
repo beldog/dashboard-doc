@@ -68,8 +68,8 @@ You can see the relationship between above listed components on the
 Database model was defined as simple as possible, keeping in mind
 possible normalization in the future without having a big impact on the data. So
 decission was to use
-\emph{Enum}\footnote{https://dev.mysql.com/doc/refman/5.0/en/enum.html} data
-type for those fields that are static or with a predefined set of
+\emph{Enum}\footnote{\url{https://dev.mysql.com/doc/refman/5.0/en/enum.html}}
+data type for those fields that are static or with a predefined set of
 elements like: country, project\_type or  type fields
 (\reffigure{f_data_model}).
 
@@ -161,7 +161,7 @@ we want to have a flexible and scalable tool, but this will be part of the
 future work.
 
 \section{The issue and what to improve}
-As slightly tackle on previous sections, building a reporting tool based on
+As slightly tackled on previous sections, building a reporting tool based on
 Excel was not the better solution, but it covered the main needs, even if we
 faced issues like slowness, a single shared spreadsheet to be used by all
 project managers, every report has a standalone database connection with the
@@ -176,17 +176,135 @@ listed its downsides, I have started thinking about how to improve it without
 affecting the main objective \ref{t_main_objective} but making it more
 user friendly.
 
-We already had listed the weaknesses and thinking on one by one, just came up
-that the main change would be to replace completly the view (Excel), that
+We already had listed the weaknesses and thinking on them, just came
+up that the main change would be to replace completely the view (Excel), that
 will solve all the issues, but will lose the power of the pivot table and
 filters, but it could be managed in a second or third stage.
 
 Now the question is: what could be the best replacement?
 
 \section{Looking for a view replacement}
+I wanted to have a very light view and user friendly, something that
+provides directly the information to the user, a dashboard where the user could
+see in one single view all the information he wants to see.
 
+Nowadays, there are good examples of dynamic data dashboards done with the
+latest online technologies like
+Graphite\footnote{\url{http://graphite.wikidot.com/}},
+Dashing\footnote{\url{http://shopify.github.io/dashing/}} or even using Google
+Charts that could provide a good
+dashboard\footnote{\url{https://developers.google.com/chart/}}.  Why online,
+because today everything is connected and you can interact with almost everything, and
+why not with the status of a project? Also, if you are not connected you are
+not cool and very unuseful, and I wanted to have a useful tool, and why not,
+also have a cool tool!
+
+On top of that, objective is challenging, so better to go for a Lean
+approach
+\footnote{\url{http://en.wikipedia.org/wiki/Lean\_software\_development}} and
+deliver small pices with the enough functionality even if they are not covering the final objective. So, following this approach the first objective was to have
+a simple view of what we are managing here, projects and dates. So using Google
+Charts we have enough to start and close the first phase. Also using a very
+plain HTML and CSS code to provide the simplest functionality to enter the
+required data.
+
+\section{Looking for a REST server}
+Once we have clear what is the view, we can start thinking about what could be
+the best option to process the data we are going to use on the view.
+
+We already knew that the architecture was going to be a server-client one and
+mostly using REST approach in order to minimize the coupling between the
+components, but there are many frameworks and web servers that provide this
+functionality and further more, so what could fit better on our model?
+
+One think I had very clear is I was looking for a Java implementation, why?
+Because it provide a big amount of possible frameworks and technologies to
+use or plug in and also maybe because I am more familiar and confident
+with it.
+
+Within the big umbrella of available Java servers
+\footnote{\url{http://en.wikipedia.org/wiki/Comparison\_of\_application\_servers\#Java}},
+I found Jersey \footnote{\url{https://jersey.java.net/}}, a RESTful web server
+implemented in Java, that covers all my needs. A frameworks available just to
+develop RESTful components, just what I was looking for.
+
+A part of the REST framework, I found too Grizzly
+\footnote{\url{https://grizzly.java.net/}} as a Server application, that will
+provide to my tool a better scalable future in case I need it taking
+advantage of Java NIO\footnote{\url{https://www.jcp.org/en/jsr/detail?id=51}}.
+
+Now that seems that we have everything in place, we can start to open Eclipse
+and start typing the code that will replace the spreadsheet. But this will be
+part of the migration plan described on the following chapter.
 
 \chapter{Migration plan}
+Do not forget that the target is to deliver a \emph{simple} tool that replace
+current Excel, so the migration will start developing the minimum code in order
+to add, update and delete project's events and also provides the same
+information that currently to the view in order to show it.
+
+Considering also that we are not familiar with Grizzly and Jersey, first thing
+will be to deploy a very simple server and REST application, using the examples,
+in order to understand the logic and the process. You can find all the
+information on the project webpage as well the tutorials and the examples that
+will drive and help you on few typical scenarios.
+
+Once we are confident with the framework we started to migrate the code and
+defining the REST methods.
+
+\section{REST methods}
+Main methods will be defined under
+\texttt{net.nuevegen.dashboard.reports.Reports} class where it will handle
+the definition and implementation of all reports available, and covering as well
+the addition and remove event's actions. 
+
+So just in order to exemplify how easy is the implementation of a REST method
+see getTimelinesByProjects method that fits with the implementation required to
+show \ref{f_report_timelines}.
+
+\begin{lstlisting}[language=Java,breaklines=true,caption=Reports.getTimelinesByProjects(),label=f_migration_gettimelines,frame=single,captionpos=b,numbers=left,
+] @GET
+@Consumes(MediaType.APPLICATION_JSON)
+@Produces(MediaType.APPLICATION_JSON)
+@Path("timelines{id : (/[a-zA-Z0-9]+)?}")
+public Response getTimelinesByProject(@PathParam("id") String id) {
+	Response response = null;
+	List<Timeline> timelines = new LinkedList<Timeline>(); 
+
+	...
+	
+	String query = "SELECT * FROM ukint_project_timelines_reports WHERE 1 ";
+
+	if (id != null && id.trim().length()>0){
+		query += "AND ticket='"+ id.replace("/", "") +"'";
+	}
+	
+	st = Dashboard.getConnection(false).prepareStatement(query);
+	rs = st.executeQuery();
+	
+	...
+	
+	GenericEntity<List<Timeline>> entity = new GenericEntity<List<Timeline>>(timelines) {};
+	response = Response.ok(entity).build();
+	
+	...
+	
+	return response;
+}
+\end{lstlisting}
+
+As you can see the annotation defined on this function allows us to specify what
+kind of HTTP method will listen (GET, POST, PUT, etc..) and the uri under which
+it will be executed, also the type of the data received (Consumes) and as well
+the type of data returned (Produces). Those annotation makes the developer's
+live more stresfuless because the final code required is encapsulated on the
+annotations and will be injected as soon as it is required.
+
+Finally, the code \texttt{Response.ok(entity)} on line 22 allows us to rewrite
+the standard HTTP response and send to the client a specific HTTP/200 code with the
+list of entities read from the database.
+
+\section{Implementing the view}
 
 \chapter{Conclusions}
 
