@@ -246,11 +246,30 @@ information that currently to the view in order to show it.
 Considering also that we are not familiar with Grizzly and Jersey, first thing
 will be to deploy a very simple server and REST application, using the examples,
 in order to understand the logic and the process. You can find all the
-information on the project webpage as well the tutorials and the examples that
-will drive and help you on few typical scenarios.
+information on the project web page as well the tutorials and the examples that
+will drive and help you on few typical scenarios, but see on the next section a
+brief introduction about how to start with it.
 
-Once we are confident with the framework we started to migrate the code and
-defining the REST methods.
+\section{Starting with Grizzly and Jersey}
+First thing you need to do is create an empty server example using Maven, so
+will have a working environment (it requires to have been setup the pom.xml
+file with the required dependencies accordingly).\\
+
+\begin{lstlisting}[language=Shell,breaklines=true,caption=Grizzly\ and\ Jersey\
+First\ setup,label=f_setup_grizzlyjersey,frame=single,captionpos=b,numbers=left] 
+$ mvn archetype:generate -DarchetypeArtifactId=jersey-quickstart-grizzly2 -DarchetypeGroupId=org.glassfish.jersey.archetypes -DinteractiveMode=false -DgroupId=net.nuevegen.dashboard -DartifactId=dashboard -Dpackage=net.nuevegen.dashboard 
+\end{lstlisting}
+
+Once the command is ran, a simple test project will be created and you can check
+the files structure and also the required clases, just three main ones:
+\begin{itemize}
+  \item Server daemon class that starts the Grizzly with Jersey framework
+  \item REST class where listeners are defined
+  \item JUnit test class
+\end{itemize}
+
+Once we played with it and we felt confident with the framework we started
+to migrate the code and defining the required methods.
 
 \section{REST methods}
 Main methods will be defined under
@@ -260,7 +279,7 @@ the addition and remove event's actions.
 
 So just in order to exemplify how easy is the implementation of a REST method
 see getTimelinesByProjects method that fits with the implementation required to
-show \ref{f_report_timelines}.
+show \ref{f_report_timelines}.\\
 
 \begin{lstlisting}[language=Java,breaklines=true,caption=Reports.getTimelinesByProjects(),label=f_migration_gettimelines,frame=single,captionpos=b,numbers=left,
 ] @GET
@@ -297,7 +316,7 @@ As you can see the annotation defined on this function allows us to specify what
 kind of HTTP method will listen (GET, POST, PUT, etc..) and the uri under which
 it will be executed, also the type of the data received (Consumes) and as well
 the type of data returned (Produces). Those annotation makes the developer's
-live more stresfuless because the final code required is encapsulated on the
+live more stressfuless because the final code required is encapsulated on the
 annotations and will be injected as soon as it is required.
 
 Finally, the code \texttt{Response.ok(entity)} on line 22 allows us to rewrite
@@ -305,6 +324,16 @@ the standard HTTP response and send to the client a specific HTTP/200 code with 
 list of entities read from the database.
 
 \section{Implementing the view}
+Now is time to implement the appropiate code on the view (aka client) in order
+to show the mentioned reports, and send and process all required actions with
+the built REST server. As mentioned on previous chapters the objective to aim is
+migrate and no need to have a nice client, but friendly so we don't
+lose the focus on the functionality. So, the implementation chosen at this
+moment is as simple as possible using HTML, CSS and JS.
+
+\subsection{}
+
+
 
 \chapter{Conclusions}
 
