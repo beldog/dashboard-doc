@@ -1,7 +1,3 @@
-\part{Migrate Excel spreadsheet dashboard to a simple REST+HTML/JS
-application}
-\label{c_phaseone}
-
 \chapter*{Motivation}
 \addcontentsline{toc}{chapter}{Motivation}
 In order to track and follow up project's status, we built a simple tool in a
@@ -29,20 +25,28 @@ analyze and decide.
 
 The challenge was there and as well the information on the database, so it was
 just a matter to migrate the spreadsheet (the view) to a HTML page with some JS,
-as first client, so we decople it from any need of 3rd party component such as
+as first client, so we decouple it from any need of 3rd party component such as
 ODBC, having in the middle a RESTful service that
-controls the communication between the client (web browser) and what matters, the data (the model).
+controls the communication between the client (web browser) and what matters,
+the data (our business).
+
+\part{Migrate Excel spreadsheet dashboard to a simple REST+HTML/JS
+application}
+\label{c_phaseone}
 
 \chapter{Current Excel architecture}
 At the beginning, the idea was to have the data centralized
 \label{t_main_objective} and implement, in a fast way, a client that could show
-it. The quicker solution, not always the right one but useful for a while, was
-to define the simpliest database model to  track the maximum amount of events with enough value to evaluate a the
-efficiency of a project and learn from our mistakes. Together with the database
-we setup a Excel spreadsheet that loads the data from the defined database, but
-we also needed to build different reports, so we difined few \emph{views} based
-on the required KPIs, so we could query it from the external spreadsheet
-without define any kind of logic, that could increase the complexity.\\
+it. The quickest solution, not always the right one but useful for a while, was
+to define the simpliest database model to  track the maximum amount of events
+with enough value to evaluate the  efficiency of a project and learn from our
+mistakes.
+
+Together with the database  we setup a Excel spreadsheet that loaded
+the data from the defined database, but  we also needed to build different
+reports, so we defined few \emph{views} based  on the required KPIs, so we could
+query it from the external spreadsheet  without define any kind of logic, that
+could increase the complexity.\\ 
 
 In short, elements defined are listed as follow:
 \begin{itemize}
@@ -67,7 +71,7 @@ You can see the relationship between above listed components on the
 \section{Database model}
 Database model was defined as simple as possible, keeping in mind
 possible normalization in the future without having a big impact on the data. So
-decission was to use
+decision was to use
 \emph{Enum}\footnote{\url{https://dev.mysql.com/doc/refman/5.0/en/enum.html}}
 data type for those fields that are static or with a predefined set of
 elements like: country, project\_type or  type fields
@@ -142,7 +146,7 @@ You can see screenshots on how they look for each of them on
 
 Each of those reports has defined one or more than one table's view that execute
 the required data calculations and format the output in a Excel friendly way, so
-the spreadsheet just need to show it and doesn't require any customization. 
+the spreadsheet just needed to show it and didn't require any customization. 
 
 This data and format coupling on the views definition was done on purpose,
 in order to be flexible enough in the future in case was needed to define a
@@ -172,7 +176,7 @@ All these points will be reviewed and covered on the next chapter.
 
 \chapter{New RESTful architecture}
 After few time working with the spreadsheet linked with the database, and having
-listed its downsides, I have started thinking about how to improve it without
+listed its downsides, we have started thinking about how to improve it without
 affecting the main objective \ref{t_main_objective} but making it more
 user friendly.
 
@@ -184,7 +188,7 @@ filters, but it could be managed in a second or third stage.
 Now the question is: what could be the best replacement?
 
 \section{Looking for a view replacement}
-I wanted to have a very light view and user friendly, something that
+We wanted to have a very light view and user friendly, something that
 provides directly the information to the user, a dashboard where the user could
 see in one single view all the information he wants to see.
 
@@ -193,16 +197,16 @@ latest online technologies like
 Graphite\footnote{\url{http://graphite.wikidot.com/}},
 Dashing\footnote{\url{http://shopify.github.io/dashing/}} or even using Google
 Charts that could provide a good
-dashboard\footnote{\url{https://developers.google.com/chart/}}.  Why online,
-because today everything is connected and you can interact with almost everything, and
-why not with the status of a project? Also, if you are not connected you are
-not cool and very unuseful, and I wanted to have a useful tool, and why not,
-also have a cool tool!
+dashboard\footnote{\url{https://developers.google.com/chart/}}.  
 
-On top of that, objective is challenging, so better to go for a Lean
-approach
+Why online? Because today everything is connected and you can interact with
+almost everything, and why not with the status of a project? Also, if you are
+not connected, you are not cool and very unuseful, and we wanted to have a
+useful tool, and why not, also have a cool tool!  On top of that, objective is
+challenging, so better to go for a lean approach
 \footnote{\url{http://en.wikipedia.org/wiki/Lean\_software\_development}} and
-deliver small pices with the enough functionality even if they are not covering the final objective. So, following this approach the first objective was to have
+deliver small pieces with the enough functionality even if they are not covering
+the final objective. So, following this approach the first target was to have
 a simple view of what we are managing here, projects and dates. So using Google
 Charts we have enough to start and close the first phase. Also using a very
 plain HTML and CSS code to provide the simplest functionality to enter the
@@ -217,27 +221,27 @@ mostly using REST approach in order to minimize the coupling between the
 components, but there are many frameworks and web servers that provide this
 functionality and further more, so what could fit better on our model?
 
-One think I had very clear is I was looking for a Java implementation, why?
-Because it provide a big amount of possible frameworks and technologies to
-use or plug in and also maybe because I am more familiar and confident
+One think we had very clear is we were looking for a Java implementation, why?
+Because it provides a big amount of possible frameworks and technologies to
+use or plug in and also maybe because we am more familiar and confident
 with it.
 
 Within the big umbrella of available Java servers
 \footnote{\url{http://en.wikipedia.org/wiki/Comparison\_of\_application\_servers\#Java}},
-I found Jersey \footnote{\url{https://jersey.java.net/}}, a RESTful web server
+we found Jersey \footnote{\url{https://jersey.java.net/}}, a RESTful web server
 implemented in Java, that covers all my needs. A frameworks available just to
-develop RESTful components, just what I was looking for.
+develop RESTful components, just what we were looking for.
 
-A part of the REST framework, I found too Grizzly
+A part of the REST framework, we found too Grizzly
 \footnote{\url{https://grizzly.java.net/}} as a Server application, that will
-provide to my tool a better scalable future in case I need it taking
+provide to or tool a better scalable future in case we need it taking
 advantage of Java NIO\footnote{\url{https://www.jcp.org/en/jsr/detail?id=51}}.
 
 Now that seems that we have everything in place, we can start to open Eclipse
 and start typing the code that will replace the spreadsheet. But this will be
 part of the migration plan described on the following chapter.
 
-\chapter{Migration plan}
+\chapter{Migration}
 Do not forget that the target is to deliver a \emph{simple} tool that replace
 current Excel, so the migration will start developing the minimum code in order
 to add, update and delete project's events and also provides the same
@@ -261,7 +265,7 @@ $ mvn archetype:generate -DarchetypeArtifactId=jersey-quickstart-grizzly2 -Darch
 \end{lstlisting}
 
 Once the command is ran, a simple test project will be created and you can check
-the files structure and also the required clases, just three main ones:
+the files structure and also the required classes, just three main ones:
 \begin{itemize}
   \item Server daemon class that starts the Grizzly with Jersey framework
   \item REST class where listeners are defined
@@ -313,41 +317,174 @@ public Response getTimelinesByProject(@PathParam("id") String id) {
 \end{lstlisting}
 
 As you can see the annotation defined on this function allows us to specify what
-kind of HTTP method will listen (GET, POST, PUT, etc..) and the uri under which
+kind of HTTP method will listen (GET, POST, PUT, etc..) and the URI under which
 it will be executed, also the type of the data received (Consumes) and as well
-the type of data returned (Produces). Those annotation makes the developer's
-live more stressfuless because the final code required is encapsulated on the
+the type of data returned (Produces). Those annotation makes developer's
+life less stressful because the final code required is encapsulated on the
 annotations and will be injected as soon as it is required.
 
 Finally, the code \texttt{Response.ok(entity)} on line 22 allows us to rewrite
 the standard HTTP response and send to the client a specific HTTP/200 code with the
-list of entities read from the database.
+list of entities read from the database, but we can return any other kind of
+standard HTTP error code.
 
 \section{Implementing the view}
-Now is time to implement the appropiate code on the view (aka client) in order
-to show the mentioned reports, and send and process all required actions with
-the built REST server. As mentioned on previous chapters the objective to aim is
-migrate and no need to have a nice client, but friendly so we don't
-lose the focus on the functionality. So, the implementation chosen at this
-moment is as simple as possible using HTML, CSS and JS.
+Now is time to implement the appropriate code on the view (aka client) in order
+to show the mentioned reports and send and process all required actions with
+the built REST server. As mentioned on previous chapters, the objective to aim
+is to migrate and no need to have a nice client, but friendly enough in order to
+not lose the focus on the functionality. So, the implementation chosen at this
+time is as simplest as possible using HTML, CSS and JS. This will be rewritten
+and improved on following phases.
 
-\subsection{}
+\subsection{Event management}
+First report to implement is the Events one (\reffigure{f_report_events}), that
+is compose by a section to add a new event (including some nice feature like to
+load last event data entered to just update the change and no need to copy and
+paste), and also an ``Events list'' as we also need a way to list, update,
+remove and edit events (CRUD).
 
+\subsubsection{``Add new Event'' coding}
+In order to allow the Project Manager to inform updates on the project planning,
+we defined this section on the view, so new Events can be added.
 
-
-\chapter{Conclusions}
-
-\chapter{Future work}
+Main logic of this standard form is:
 \begin{itemize}
-	\item Refactor database connectivity using a proper JPA based framework.
-  
-	Implement a real database connection pool using one of the existing persistence
-	frameworks that implements JPA\footnote{Java Persistence API:
+  \item Load last event informed: Once the user enter the project ID on the
+  form, the tool looks for the latest entry on the project, if it is found
+  (could be the first one so no previous entry will found) then it prefills all
+  remaining fields with the information stored on the database, so the owner of
+  the information needs only to update  the relevant detail, usually updating
+  the timelines field and the description of the event.
+  \item Add new event: Once the form is filled, it is sent via asynchronous call
+  using jQuery.
+\end{itemize}
+
+In order to execute the action, once the user wants to confirm the data, you
+just need to add a listener to the \emph{submit} form action, so jQuery will
+catch the event and rely it to your code. See as follows the simple ajax POST
+call implemented:
+\\
+
+\begin{lstlisting}[language=HTML,breaklines=true,caption=Add\ new\ Event\
+HTML\ code,label=f_migration_addnewevent_html,frame=single,captionpos=b]
+<form id="eventForm">
+  <label for="project_id">Project Id</label>
+    <input type="text" name="project_id" id="project_id" size="4" />
+  <label for="country">Country</label>
+  <input type="text" name="country" id="country" size="4" /> 
+  ...
+  <input type="submit" name="submit" id="createEvent" value="add" />
+</form>
+\end{lstlisting}
+
+\begin{lstlisting}[language=Javascript,breaklines=true,caption=Add\ new\ Event\
+jQuery\ code,label=f_migration_addnewevent_jquery,frame=single,captionpos=b,numbers=left] 
+$("#eventForm").submit(function() { 
+  var url = "/rest/report/events/"+ $("#eventForm").find('#project_id').val();
+  $.ajax({ 
+    type: "POST", 
+    url: url, 
+    data: $("#eventForm").serialize(),
+    success: function(data) {
+      getData("events", "#filterProjectId", "#excelEventsTable", true);
+    },
+    error: handleError
+  });
+  return false;
+});
+\end{lstlisting}
+
+\subsubsection{``Events list'' coding}
+This part of the view requires more presentation code, and also to
+implement the rest of the actions: update and delete.
+
+Following the approach to build it as simple as possible, the code implemented
+has been using \texttt{table} tags and a mechanism to build dynamically (via
+jquery) the events list. 
+
+At this point, we know already that we will need to use a similar logic to build
+the rest of the reports that show a list of details including an action, so the
+objective on this first report is implement the required methods decoupling them
+from the data managed, and just define a pre-condition and a post-condition that
+could fit all reports at once. After evaluation you can see the list of methods
+required to fit such requirement:
+
+\begin{itemize}
+  \item \textt{getData()}: This method abstracts the data getter with the main
+  logic required to execute a REST-GET query to the server, when the projectId
+  is entered, and return the result, handling possible errors and rely them to
+  the error handler component.
+  \item \textt{buildTable()}: This method encapsulates the main table builder,
+  controlling headers to show, rows and columns based on the parameters.
+  \item \texttt{enrichRow()}: This method is only used on those rows that
+  include a double-click edit feature, like the \emph{Events list}, where the
+  user just need to double click on the updatable fields in order to change
+  it, and as soon as the focus is lost, the field is automatically updated on
+  the database.
+\end{itemize}
+
+Same logic will be followed on the rest of reports but on \emph{Timelines} one,
+where the approach is different.
+
+\subsection{Timelines report}
+Here is where the project gets fancy, because now is the time to reuse a 3rd
+party framework to show in a colorful way project's timelines so the Project
+Manager can have a quick view of what is going on, and what projects are getting
+stuck.
+
+After expend some time looking for a framework that covers all the needs, or at
+least most of them, we found Google Charts API
+\footnote{\url{https://google-developers.appspot.com/chart/interactive/docs/gallery/timeline}},
+that provides a wide variety of charts. And one of them is the \emph{Timeline}
+one, perfect for my report.
+
+Code for this report was built \emph{ad hoc}, as the API required a specific
+format on the data, different that the one returned by the server, so we
+implemented a method called \texttt{plotTimeline()} that get ``all'' projects data or the
+filter one, if the user enter a single project id, and process the json object
+in order to accommodate the information in the right way so the chart can show
+it properly. You can see the result on 
+\reffigure{f_report_timelines_new}:
+
+\begin{figure}[ht!]
+	\centering
+   	\includegraphics[width=1\textwidth]{./resources/report_timelines_new.png}
+   	\caption{Timelines report}
+   	\label{f_report_timelines_new}
+\end{figure}
+
+\subsection{The Output}
+Once we put all reports together in a single page we obtain the following
+result:
+
+\begin{figure}[ht!]
+	\centering
+   	\includegraphics[width=0.9\textwidth]{./resources/dashboard.png}
+   	\caption{http://dasboard.buongiorno.com}
+   	\label{f_dashboard}
+\end{figure}
+
+\chapter{Conclusions and Future work}
+There is a wide variety of ways to do the same thing, also frameworks and
+technologies to use. The ones used until now on this project are just an example
+of the technologies that fits the project needs but it doesn't mean they are the best
+ones, but at least covers the main objective being compliance with it in a
+short-mid term. But, as technology changes every day, the most important part is
+to isolate (or decouple) your main business logic out of the technology used.
+So, if in the future you are force to change the ecosystem, at least you can ensure your
+logic will not change drastically and you can migrate it from one system to
+another.\\
+
+We left out of this part improvements and things to do better, but they will be
+covered on the next chapter. Things like:
+
+\begin{itemize}
+	\item Refactor database connectivity using a proper JPA based framework\footnote{Java Persistence API:
 	\url{http://www.oracle.com/technetwork/articles/javaee/jpa-137156.html}}.
-	
 	\item Remove data-format coupling returned to the client.
 	\item Refactor client making it usable for the final user (requires assessment
-	and evaluation of main actions to carry out by the user).
+	and evaluation of main actions to carry out by the user and role).
 \end{itemize}
 
 %\begin{appendices}

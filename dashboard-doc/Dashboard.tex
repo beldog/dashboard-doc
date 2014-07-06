@@ -12,7 +12,7 @@
 % Required packages
 %
 \usepackage[english]{babel}		% language
-%\usepackage[latin1]{inputenc}	% para acentos y eñes
+\usepackage[utf8]{inputenc}		% para acentos y eñes
 \usepackage{graphicx}			% graphics in jpeg, png or pdf format
 \usepackage{titleref}
 \usepackage{tocbibind}
@@ -53,8 +53,10 @@
 %
 \begin{document}
 
+\inputencoding{latin1}
 \title{Dashboard: Track, analyze and decide}
 \author{Héctor López}
+\inputencoding{utf8}
 
 \date{\today}
 \maketitle
@@ -73,9 +75,7 @@ A Silvia :)
 \chapter*{Acknowledgments}
 \addcontentsline{toc}{chapter}{Acknowledgments}
 
-En primer lugar, agradecer la notable aportación de nuestros tutores: JM Gimeno y
-Carles Mateu en el proceso de aprendizaje. En especial la paciencia y dedicación
-de JM Gimeno a este proyecto. \\
+TBD \\
 
 
 %
@@ -90,12 +90,16 @@ de JM Gimeno a este proyecto. \\
 
 \begin{thebibliography}{1}
 
-	\bibitem{McAfeer06}{McAfeer06} Jeff McAfeer, Jean-Michel Lemieux
-		{\em ``Eclipse Rich Client Platform : designing, coding, and packaging Java
-		applications''}. Addison-Wesley, 2006.
-	\bibitem{RobHa04}{RobHa04} Robert Harris and Rob Warner
-		{\em ``The Definitive Guide to SWT and JFace''}. Apress, 2004.
-	\bibitem{}{}
+	\bibitem{}{}{\em ``Jersey 2.10.1 User Guide''}. \url{https://jersey.java.net}.
+	\bibitem{}{} 
+		{\em ``Understanding JDBC internals and timeouts configuration''}.
+		\url{http://www.cubrid.org/blog/dev-platform/understanding-jdbc-internals-and-timeout-configuration/}.
+	\bibitem{}{}{\em ``Stackoverflow web site''}. \url{http://stackoverflow.com/}.
+	\bibitem{}{}{\em ``Google Charts documentation''}.
+	\url{https://google-developers.appspot.com/chart/interactive/docs/gallery}.
+	\bibitem{}{}{\em ``Microsoft Excel Overview of connectiong to import data''}
+	\url{http://office.microsoft.com/en-us/excel-help/overview-of-connecting-to-importing-data-HP010342748.aspx}.
+	
 \end{thebibliography}
 
 \end{document}
