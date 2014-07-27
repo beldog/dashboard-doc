@@ -22,6 +22,126 @@
 \usepackage{multirow}
 \usepackage{listings}			%Sourcecode
 \usepackage[toc,page]{appendix}
+\usepackage{color}
+
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+\definecolor{gray97}{gray}{.97}
+\definecolor{gray75}{gray}{.75}
+\definecolor{gray45}{gray}{.45}
+
+
+\lstdefinestyle{html}{
+	language=html,
+    frame=Ltb,
+	framerule=0pt,
+	aboveskip=0.5cm,
+	framextopmargin=3pt,
+	framexbottommargin=3pt,
+	framexleftmargin=0.4cm,
+	framesep=0pt,
+	rulesep=.4pt,
+	numbers=left,
+	numbersep=15pt,
+	numberstyle=\tiny,
+	numberfirstline = false,
+	breaklines=true,
+	rulesepcolor=\color{black},
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    %basicstyle=\small\sffamily,
+    basicstyle=\scriptsize,
+    breakatwhitespace=false,         
+    captionpos=b,                    
+%     keepspaces=true,                 
+%     showspaces=false,                
+%     showstringspaces=false,
+%     showtabs=false,                  
+%     tabsize=2
+}
+
+\lstdefinestyle{sql}
+{
+	language=sql,
+    frame=Ltb,
+	framerule=0pt,
+	aboveskip=0.5cm,
+	framextopmargin=3pt,
+	framexbottommargin=3pt,
+	framexleftmargin=0.4cm,
+	framesep=0pt,
+	rulesep=.4pt,
+	numbers=left,
+	numbersep=15pt,
+	numberstyle=\tiny,
+	numberfirstline = false,
+	breaklines=true,
+	rulesepcolor=\color{black},
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    %basicstyle=\small\sffamily,
+    basicstyle=\scriptsize,
+    breakatwhitespace=false,         
+    captionpos=b,                    
+%     keepspaces=true,                 
+%     showspaces=false,                
+%     showstringspaces=false,
+%     showtabs=false,                  
+%     tabsize=2
+}
+
+% minimizar fragmentado de listados
+\lstnewenvironment{listing}[1][]
+{\lstset{#1}\pagebreak[0]}{\pagebreak[0]}
+
+\lstdefinestyle{console}
+{
+	language=shell,
+	basicstyle=\scriptsize\bf\ttfamily,
+	backgroundcolor=\color{gray75},
+	commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+}
+
+\lstdefinestyle{c}
+{
+	language=html,
+	frame=Ltb,
+	framerule=0pt,
+	aboveskip=0.5cm,
+	framextopmargin=3pt,
+	framexbottommargin=3pt,
+	framexleftmargin=0.4cm,
+	framesep=0pt,
+	rulesep=.4pt,
+	backgroundcolor=\color{gray97},
+	rulesepcolor=\color{black},
+	%
+	stringstyle=\ttfamily,
+	showstringspaces = false,
+	basicstyle=\small\ttfamily,
+	commentstyle=\color{gray45},
+	keywordstyle=\bfseries,
+	%
+	numbers=left,
+	numbersep=15pt,
+	numberstyle=\tiny,
+	numberfirstline = false,
+	breaklines=true
+}
+
+\lstset{style=html}
 
 \renewcommand{\theTitleReference}[2]{\chaptername{}\ #1:\ \emph{#2}}
 \newcommand{\reffigure}[1]{\figurename{}\ \ref{#1}} 
@@ -77,6 +197,10 @@ A Silvia :)
 
 TBD \\
 
+\chapter*{Source Code}
+\addcontentsline{toc}{chapter}{Source Code}
+All code is push to \url{https://github.com/beldog/dashboard} repositry, as well
+this document under \url{https://github.com/beldog/dashboard-doc} repository.
 
 %
 % Chapters
@@ -87,6 +211,7 @@ TBD \\
 \input{Dashboard_PhaseThree.tex}
 %\input{trabajofuturo.tex}
 %\input{conclusiones.tex}
+
 
 \begin{thebibliography}{1}
 
@@ -99,7 +224,14 @@ TBD \\
 	\url{https://google-developers.appspot.com/chart/interactive/docs/gallery}.
 	\bibitem{}{}{\em ``Microsoft Excel Overview of connectiong to import data''}
 	\url{http://office.microsoft.com/en-us/excel-help/overview-of-connecting-to-importing-data-HP010342748.aspx}.
-	
+	\bibitem {}{}{\em ``Bootstrap user guide''}. \url{http://getbootstrap.com/css/}
+	and \url{http://getbootstrap.com/components/}.
+	\bibitem{}{}{\em ``Elasticsearch Guide''}.	\url{http://www.elasticsearch.org/guide/}.
+	\bibitem{}{Clinton Gormley}{\em ``Getting down and dirty with Elasticsearch''}.
+	\url{https://www.youtube.com/watch?v=52G5ZzE0XpY}
+	\bibitem{}{Frank Evers}{\em ``Four ways to index relational data in
+	Elasticsearch''}.
+	\url{http://voormedia.com/blog/2014/06/four-ways-to-index-relational-data-in-elasticsearch}.
 \end{thebibliography}
 
 \end{document}

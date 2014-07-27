@@ -1,18 +1,18 @@
 \chapter*{Motivation}
 \addcontentsline{toc}{chapter}{Motivation}
-In order to track and follow up project's status, we built a simple tool in a
-spreadsheet that linked with a database allowed us to log each change (aka
-\emph{event}) on the project status on the following scope: phase change
+In order to track and follow up project's status, my colleagues and I
+built, on 2013, a simple tool in a spreadsheet that linked with a database
+allowed us to log each change (aka \emph{event}) on the project status on the following scope: phase change
 end/start, delay, launch.
 
 This tool also gave us a good view about different selected KPI \footnote{Key
-Performance Indicator}. And based on those indicators we built few reports:
+Performance Indicator}. And based on those indicators we built some reports:
 Project's events, Projects launched, Projects delayed (and detail), Projects
 Gantt and Project's timelines.
 
 The tool was fine for a while, but it took to much time to load all data
-from the database, and also was not fully compatible with all users, because of
-the need to install some extra required components like the ODBC for those with
+from the database, and also was not fully accessible for all users, because
+of the need to install some extra required components like the ODBC for those with
 Windows, or not even compatible with those using Linux computers, because the
 tool was built on Microsoft Excel.
 
@@ -38,15 +38,15 @@ application}
 At the beginning, the idea was to have the data centralized
 \label{t_main_objective} and implement, in a fast way, a client that could show
 it. The quickest solution, not always the right one but useful for a while, was
-to define the simpliest database model to  track the maximum amount of events
+to define the simplest database model to  track the maximum amount of events
 with enough value to evaluate the  efficiency of a project and learn from our
 mistakes.
 
-Together with the database  we setup a Excel spreadsheet that loaded
+Together with the database  we setup an Excel spreadsheet that loaded
 the data from the defined database, but  we also needed to build different
 reports, so we defined few \emph{views} based  on the required KPIs, so we could
-query it from the external spreadsheet  without define any kind of logic, that
-could increase the complexity.\\ 
+query it from the external spreadsheet  without defining any kind of logic,
+that could increase the complexity.\\ 
 
 In short, elements defined are listed as follow:
 \begin{itemize}
@@ -149,18 +149,18 @@ the required data calculations and format the output in a Excel friendly way, so
 the spreadsheet just needed to show it and didn't require any customization. 
 
 This data and format coupling on the views definition was done on purpose,
-in order to be flexible enough in the future in case was needed to define a
-different viewer component, a part of the Excel, such as and HTML, or just
-migrate it to a different platform. But, on both case the model could remain
-untouched if the objective remained the same and only is needed to change the
-view with a more powerful or friendly one. See and example on
-\ref{f_report_launchesbymonth}.
+in order to be flexible enough in the future in case defining a different viewer
+component was needed, a part of the Excel, such as and HTML, or just migrate it
+to a different platform. But, on both cases the model could remain untouched if
+the objective remained the same and only is needed to change the  view with a
+more powerful or friendly one. See an example on
+\ref{f_report_launchesbymonth}, where ``Amount of Launches by Month'' query 
+is defined, querying the main table \texttt{pm\_project\_event}, grouping and
+counting by launch's year-month, country and project_type.
 
-\lstinputlisting[language=SQL,breaklines=true,caption=Launches
-by month
-view,label=f_report_launchesbymonth,frame=single,captionpos=b]{resources/report_launchesbymonth.sql}
+\lstinputlisting[style=sql,caption=Launches\ by\ month\ view,label=f_report_launchesbymonth]{resources/report_launchesbymonth.sql}
 
-In the other hand, decoupling it will need to be taken sooner or later if
+In the other hand, decoupling it will need to be taken up sooner or later if
 we want to have a flexible and scalable tool, but this will be part of the
 future work.
 
@@ -168,8 +168,8 @@ future work.
 As slightly tackled on previous sections, building a reporting tool based on
 Excel was not the better solution, but it covered the main needs, even if we
 faced issues like slowness, a single shared spreadsheet to be used by all
-project managers, every report has a standalone database connection with the
-possible impact on resources it could have and manual database insert per
+project managers, every report had a standalone database connection with the
+possible impact on resources it could have a manual database insert per
 each project's event.
 
 All these points will be reviewed and covered on the next chapter. 
@@ -229,10 +229,16 @@ with it.
 Within the big umbrella of available Java servers
 \footnote{\url{http://en.wikipedia.org/wiki/Comparison\_of\_application\_servers\#Java}},
 we found Jersey \footnote{\url{https://jersey.java.net/}}, a RESTful web server
-implemented in Java, that covers all my needs. A frameworks available just to
-develop RESTful components, just what we were looking for.
+implemented in Java, that covers all requirements:
+\begin{itemize}
+  \item Java environment
+  \item Encapsulate 
+  \item 
+\end{itemize}
+A frameworks
+available just to develop RESTful components, just what we were looking for.
 
-A part of the REST framework, we found too Grizzly
+A part of the REST framework, we also found too Grizzly
 \footnote{\url{https://grizzly.java.net/}} as a Server application, that will
 provide to or tool a better scalable future in case we need it taking
 advantage of Java NIO\footnote{\url{https://www.jcp.org/en/jsr/detail?id=51}}.
@@ -242,7 +248,7 @@ and start typing the code that will replace the spreadsheet. But this will be
 part of the migration plan described on the following chapter.
 
 \chapter{Migration}
-Do not forget that the target is to deliver a \emph{simple} tool that replace
+Do not forget that the target is to deliver a \emph{simple} tool that replaces
 current Excel, so the migration will start developing the minimum code in order
 to add, update and delete project's events and also provides the same
 information that currently to the view in order to show it.
@@ -255,19 +261,23 @@ will drive and help you on few typical scenarios, but see on the next section a
 brief introduction about how to start with it.
 
 \section{Starting with Grizzly and Jersey}
-First thing you need to do is create an empty server example using Maven, so
-will have a working environment (it requires to have been setup the pom.xml
-file with the required dependencies accordingly).\\
+First thing you need to do is to create an empty server example using Maven,
+as described on \ref{f_setup_grizzlyjersey} where maven generates a new
+project based on the indicated archetype, in our case based on artifact
+\texttt{jersey-quickstart-grizzly2} on group
+\texttt{org.glassfish.jersey.archetypes} and we just need to specify our own
+group, artifact and packages ids that will be used byt default on our maven
+project and on our package's structure. Once it is executed you will have a
+working environment (it requires to have been setup the pom.xml file with the required dependencies accordingly).\\
 
-\begin{lstlisting}[language=Shell,breaklines=true,caption=Grizzly\ and\ Jersey\
-First\ setup,label=f_setup_grizzlyjersey,frame=single,captionpos=b,numbers=left] 
+\begin{lstlisting}[style=console,caption=Grizzly\ and\ Jersey\ First\ setup,label=f_setup_grizzlyjersey] 
 $ mvn archetype:generate -DarchetypeArtifactId=jersey-quickstart-grizzly2 -DarchetypeGroupId=org.glassfish.jersey.archetypes -DinteractiveMode=false -DgroupId=net.nuevegen.dashboard -DartifactId=dashboard -Dpackage=net.nuevegen.dashboard 
 \end{lstlisting}
 
-Once the command is ran, a simple test project will be created and you can check
-the files structure and also the required classes, just three main ones:
+Once the command is ran, a simple test project will be created containing the
+files structure and also the required classes, just three main ones: 
 \begin{itemize}
-  \item Server daemon class that starts the Grizzly with Jersey framework
+  \item Server daemon class that starts Grizzly with Jersey framework
   \item REST class where listeners are defined
   \item JUnit test class
 \end{itemize}
@@ -285,8 +295,8 @@ So just in order to exemplify how easy is the implementation of a REST method
 see getTimelinesByProjects method that fits with the implementation required to
 show \ref{f_report_timelines}.\\
 
-\begin{lstlisting}[language=Java,breaklines=true,caption=Reports.getTimelinesByProjects(),label=f_migration_gettimelines,frame=single,captionpos=b,numbers=left,
-] @GET
+\begin{lstlisting}[language=Java,breaklines=true,caption=Reports.getTimelinesByProjects(),label=f_migration_gettimelines]
+@GET
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 @Path("timelines{id : (/[a-zA-Z0-9]+)?}")
@@ -363,11 +373,14 @@ Main logic of this standard form is:
 In order to execute the action, once the user wants to confirm the data, you
 just need to add a listener to the \emph{submit} form action, so jQuery will
 catch the event and rely it to your code. See as follows the simple ajax POST
-call implemented:
+call implemented, where all fields in the form are serialized and once the
+server returns a successful response, it will be handled by the code placed
+under \texttt{success:}, in our case is a function that force a reload on the Events
+table, otherwise the error will be catched by \texttt{error:} section.
 \\
 
 \begin{lstlisting}[language=HTML,breaklines=true,caption=Add\ new\ Event\
-HTML\ code,label=f_migration_addnewevent_html,frame=single,captionpos=b]
+HTML\ code,label=f_migration_addnewevent_html]
 <form id="eventForm">
   <label for="project_id">Project Id</label>
     <input type="text" name="project_id" id="project_id" size="4" />
@@ -379,7 +392,7 @@ HTML\ code,label=f_migration_addnewevent_html,frame=single,captionpos=b]
 \end{lstlisting}
 
 \begin{lstlisting}[language=Javascript,breaklines=true,caption=Add\ new\ Event\
-jQuery\ code,label=f_migration_addnewevent_jquery,frame=single,captionpos=b,numbers=left] 
+jQuery\ code,label=f_migration_addnewevent_jquery] 
 $("#eventForm").submit(function() { 
   var url = "/rest/report/events/"+ $("#eventForm").find('#project_id').val();
   $.ajax({ 
@@ -437,12 +450,12 @@ After expend some time looking for a framework that covers all the needs, or at
 least most of them, we found Google Charts API
 \footnote{\url{https://google-developers.appspot.com/chart/interactive/docs/gallery/timeline}},
 that provides a wide variety of charts. And one of them is the \emph{Timeline}
-one, perfect for my report.
+one, perfect for the required report.
 
 Code for this report was built \emph{ad hoc}, as the API required a specific
 format on the data, different that the one returned by the server, so we
 implemented a method called \texttt{plotTimeline()} that get ``all'' projects data or the
-filter one, if the user enter a single project id, and process the json object
+filtered one, if the user enter a single project id, and process the json object
 in order to accommodate the information in the right way so the chart can show
 it properly. You can see the result on 
 \reffigure{f_report_timelines_new}:
