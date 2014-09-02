@@ -1,5 +1,4 @@
-\part{Phase Two: Implement Dashboard view with HTLM5/CSS3/JS + extend RESTful
-API}
+\part{Phase Two: Implement Client with HTLM5, CSS3 and JS}
 
 \chapter*{Introduction}
 \label{c_phasetwo}
@@ -74,7 +73,7 @@ following \reffigure{f_facelift_bootstrap},
    	\label{f_facelift_bootstrap_3}
 \end{figure}
 
-\chapter{Interactive timelines}
+\chapter{Interactive Timelines}
 Now we have a responsive and coherent look and feel, we want to be able to
 update timelines using directly the timeline chart instead of using 
 (\ref{sec:eventlist}) form, that could be less user friendly.
@@ -86,7 +85,7 @@ type or description.
 
 The main issue we face is Google charts doesn't allow any interaction on the
 elements shown, as they are the result of the data already processed, so if we
-want to update it we need to update the data and refresh it. But, insteat allows
+want to update it we need to update the data and refresh it. But, instead allows
 us to customize the \emph{tooltip} object, being able to add an \emph{action},
 where we could implement the logic we want
 somehow\footnote{\url{https://developers.google.com/chart/interactive/docs/customizing_tooltip_content?hl=es#tooltip_actions}}.
@@ -103,7 +102,7 @@ Library}\footnote{\url{http://almende.github.io/chap-links-library/}}, that
 provides an interactive timelines chart and has been developed as Google
 Visualization Chart, so compatible with what we have implemented till now.
 
-\section{Appliying CHAP Timeline chart}
+\section{Applying CHAP Timeline chart}
 In order to update our tool with the new library and timeline chart, we just
 need to download the library and related resources (timeline-2.9.0.zip) and
 adjust our html code having reference to it:
@@ -120,11 +119,12 @@ Once we have the proper JS library loaded and the related CSS together with the
 rest of the resources included on the zip file, we proceed to adapt our data to
 the new chart.
 
-As mentioned before, this library is compatible with Google Visualitzation
+As mentioned before, this library is compatible with Google Visualization
 Chart, that means that we can use \texttt{var dataTable = new
 google.visualization.DataTable();} objects to define the data, in the same way
 than before, the only small change we need to do is to rename column names based
-on the specified on the new library API as shown on the \reffigure{f_interactivetimelines_code}
+on the on the new library API as shown on the
+\reffigure{f_interactivetimelines_code}
 
 \begin{lstlisting}[language=Javascript,breaklines=true,caption=CHAP\ Link\
 library,label=f_interactivetimelines_code]
@@ -142,22 +142,115 @@ dataTable.addColumn({ type: 'string', id: 'className' });
 
 Where:
 \begin{itemize}
-  \item \texttt{group}: indicates the project that enclose the event, this is
+  \item \texttt{group}: indicates the project that enclosed the event, this is
   because we have more than one event per project.
-  \item \texttt{editable}: a flag that enables or disable the editable feature
-  for a specific event.
+  \item \texttt{editable}: a flag that enables or disables the editable feature
+  for a specific event within the chart using the mouse.
   \item \texttt{className}: field that allows us to set a specific style to this
   element.
 \end{itemize}
 
-\chapter{Extending Dashboard with Elasticsearch and Kibana}
-Working on this currently and see if is feasible to implement the searching and
-data calculation required for the reports based on Elasticsearch. The
-main interesting point here is that we can change the way that we have been
-thinking about the data on this project, and switch it from a relational data
-model (MySQL), to a noSQL approach using Document model (JSON), something that our
-application already uses :)
+On the following \reffigure{f_timeline_chap} you can see the style is mostly the
+same to the one built using Google charts \reffigure{f_timeline_google},
+but the graph generated with CHAP Links allows us to interact with:
+\begin{itemize}
+  \item Time scale: we can zoom in or out
+  \item Add new event
+  \item Delete present events
+  \item Update starting and ending date for each event
+\end{itemize}
 
-Don't know where it will end, but let's see and have fun with it along the
-process.
+\begin{figure}[ht!]
+	\centering
+   	\includegraphics[width=1\textwidth]{./resources/timeline_chap.png}
+   	\caption{Timelines chart using CHAP Links API}
+   	\label{f_timeline_chap}
+\end{figure}
 
+\begin{figure}[ht!]
+	\centering
+   	\includegraphics[width=1\textwidth]{./resources/timeline_google.png}
+   	\caption{Timelines chart using Google Visualization Chart API}
+   	\label{f_timeline_google}
+\end{figure} 
+
+This interaction can be processed implementing the right listeners, in our case
+we just implement a simple listener that creates a new Event informing the new
+dates. The way to do it is just bulding on code the form fields required and
+call the same method used on \reffigure{f_migration_addnewevent_jquery}, but
+refactored in order to be used by the form and by the chart.
+
+\begin{lstlisting}[language=Javascript,breaklines=true,caption=CHAP On\
+change\ event,label=f_interactivetimelines_onchange_code] 
+timeline = new links.Timeline(container);
+	
+// callback function for the change event
+var onchanged = function (event) {
+    // retrieve the changed row
+    var row = getSelectedRow();
+    console.debug(timeline.getSelection());
+    if (row != undefined) {
+        var today = new Date();
+        var currentData = data[row];
+        var row = timeline.getItem(row);
+        var data2create = new Array();
+        
+        data2create.push({'name':'project_id', 'value': currentData['ticket']});
+        data2create.push({'name':'country', 'value': currentData['country']});
+        data2create.push({'name':'event', 'value': currentData['phase']});
+        data2create.push({'name':'type', 'value': 'info'});
+        data2create.push({'name':'project_type', 'value': 'Maintenance'});
+        data2create.push({'name':'impact', 'value': 0});
+        data2create.push({'name':'reason', 'value': ''});
+        data2create.push({'name':'date', 'value': today.getFullYear() +"-"+ today.getMonth()+1 +"-"+ today.getDate()});
+        data2create.push({'name':'timelines', 'value': row['end']});
+        
+        createEvent(currentData["ticket"], data2create);
+    }
+};
+
+google.visualization.events.addListener(timeline, 'changed', onchanged);
+\end{lstlisting} 
+
+Note, that the code implemented and shown on \ref{f_interactivetimelines_onchange_code} is not 100\% correct, as
+it is using static values, while they should be dynamic ones (like \texttt{project\_type} or
+\texttt{type}), and \texttt{timelines} value should be process and well informed
+based on original event. But it will be solved on the future work, as it will
+require a deep refactoring on the data model, as the graph is the result of
+calculating small events in order to build the proper phases and the client is
+only aware about the final result (start date and end date).
+
+
+% \chapter{Extending Dashboard with Elasticsearch and Kibana}
+% Working on this currently and see if is feasible to implement the searching and
+% data calculation required for the reports based on Elasticsearch. The
+% main interesting point here is that we can change the way that we have been
+% thinking about the data on this project, and switch it from a relational data
+% model (MySQL), to a noSQL approach using Document model (JSON), something that our
+% application already uses :)
+% 
+% Don't know where it will end, but let's see and have fun with it along the
+% process.
+
+\chapter{Conclusions and Future work}
+Building a tool usually requires significant time for coding what you have
+defined on the Use/Business cases, but a major part of the time is also used to
+assess and evaluate which tools/frameworks provide the open source community
+that could be reused and fit on your own project. This investment on reusing
+components from 3rd is a common practise and it will safe value time that you
+could invest on other tasks. 
+In the same way that reusing Bootstrap or Google
+Charts provides a good result without any need to invest time on coding it from
+scratch rather than read the API.\\
+
+
+We left out of this part improvements and things to do better, but they will be
+covered on future work. Things like:
+
+\begin{itemize}
+	\item Implement rest of listeners and actions required on CHAP Links Timeline
+	chart to build a full interactive chart.
+	\item Automate dependencies linking projects with 3rd ticketing tools.
+	\item Define and implement a performance and evaluation system able to detect
+	risk, and calculate&evaluate main KPIs.
+\end{itemize}
