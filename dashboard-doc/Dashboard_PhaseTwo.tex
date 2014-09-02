@@ -74,6 +74,82 @@ following \reffigure{f_facelift_bootstrap},
    	\label{f_facelift_bootstrap_3}
 \end{figure}
 
+\chapter{Interactive timelines}
+Now we have a responsive and coherent look and feel, we want to be able to
+update timelines using directly the timeline chart instead of using 
+(\ref{sec:eventlist}) form, that could be less user friendly.
+
+At this stage the first thing we do is to review the API looking for a
+\emph{interactive} feature that allows us to implement the respective events to
+extend or move an event, as well as change their inherent properties like event
+type or description.
+
+The main issue we face is Google charts doesn't allow any interaction on the
+elements shown, as they are the result of the data already processed, so if we
+want to update it we need to update the data and refresh it. But, insteat allows
+us to customize the \emph{tooltip} object, being able to add an \emph{action},
+where we could implement the logic we want
+somehow\footnote{\url{https://developers.google.com/chart/interactive/docs/customizing_tooltip_content?hl=es#tooltip_actions}}.
+
+After try it few times on our Timeline chart and read carefully the
+documentation, turns out this Tooltip feature is not available for our specific
+type of chart. Also there is open an issue requesting the same logic on
+timelines chart
+(\url{https://code.google.com/p/google-visualization-api-issues/issues/detail?id=1320}),
+so is not feasible to keep using Google charts if we want to have an interactive
+timeline chart. Because of that, we started to look for alternatives, and one of
+the alternatives found is \emph{CHAP Links
+Library}\footnote{\url{http://almende.github.io/chap-links-library/}}, that
+provides an interactive timelines chart and has been developed as Google
+Visualization Chart, so compatible with what we have implemented till now.
+
+\section{Appliying CHAP Timeline chart}
+In order to update our tool with the new library and timeline chart, we just
+need to download the library and related resources (timeline-2.9.0.zip) and
+adjust our html code having reference to it:
+
+\begin{lstlisting}[style=html,breaklines=true,caption=CHAP\ Link\
+library,label=f_interactivetimelines_code]
+<!-- CHAP Timeline charthttp://almende.github.io/chap-links-library/timeline.html -->
+<script type="text/javascript" src="timeline/timeline.js"></script> 
+<link rel="stylesheet" type="text/css" href="timeline/timeline.css">
+<!-- CHAP Timeline chart -->
+\end{lstlisting} 
+
+Once we have the proper JS library loaded and the related CSS together with the
+rest of the resources included on the zip file, we proceed to adapt our data to
+the new chart.
+
+As mentioned before, this library is compatible with Google Visualitzation
+Chart, that means that we can use \texttt{var dataTable = new
+google.visualization.DataTable();} objects to define the data, in the same way
+than before, the only small change we need to do is to rename column names based
+on the specified on the new library API as shown on the \reffigure{f_interactivetimelines_code}
+
+\begin{lstlisting}[language=Javascript,breaklines=true,caption=CHAP\ Link\
+library,label=f_interactivetimelines_code]
+var container = document.getElementById('timelinePlot');
+var chart = new google.visualization.Timeline(container);
+var dataTable = new google.visualization.DataTable();
+
+dataTable.addColumn({ type: 'date', id: 'start' });
+dataTable.addColumn({ type: 'date', id: 'end' });
+dataTable.addColumn({ type: 'string', id: 'content' });
+dataTable.addColumn({ type: 'string', id: 'group' });
+dataTable.addColumn({ type: 'boolean', id: 'editable' });
+dataTable.addColumn({ type: 'string', id: 'className' });
+\end{lstlisting} 
+
+Where:
+\begin{itemize}
+  \item \texttt{group}: indicates the project that enclose the event, this is
+  because we have more than one event per project.
+  \item \texttt{editable}: a flag that enables or disable the editable feature
+  for a specific event.
+  \item \texttt{className}: field that allows us to set a specific style to this
+  element.
+\end{itemize}
+
 \chapter{Extending Dashboard with Elasticsearch and Kibana}
 Working on this currently and see if is feasible to implement the searching and
 data calculation required for the reports based on Elasticsearch. The

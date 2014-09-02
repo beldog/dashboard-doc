@@ -228,20 +228,28 @@ with it.
 
 Within the big umbrella of available Java servers
 \footnote{\url{http://en.wikipedia.org/wiki/Comparison\_of\_application\_servers\#Java}},
-we found Jersey \footnote{\url{https://jersey.java.net/}}, a RESTful web server
-implemented in Java, that covers all requirements:
+we found Jersey \footnote{\url{https://jersey.java.net/}}, a
+RESTful framework implemented in Java, that covers the following
+requirements:
 \begin{itemize}
   \item Java environment
-  \item Encapsulate 
-  \item 
+  \item Compatible with Java containers such as Apache Tomcat 
+  \item Extensible and scalable
+  \item Compatible with JAX-RS
+  \item Easy to use out of the box
 \end{itemize}
-A frameworks
-available just to develop RESTful components, just what we were looking for.
+
+There were other available options, such as
+Restlet\footnote{\url{http://restlet.com}} or
+RESTEasy\footnote{\url{http://resteasy.jboss.org/}}. All three options fit our
+needs, but we decided to use Jersey just to try it, but all three (and others)
+frameworks are good enough so far, so we just needed to pick one and try it.
 
 A part of the REST framework, we also found too Grizzly
 \footnote{\url{https://grizzly.java.net/}} as a Server application, that will
 provide to or tool a better scalable future in case we need it taking
 advantage of Java NIO\footnote{\url{https://www.jcp.org/en/jsr/detail?id=51}}.
+Both Jersey and Grizzly are Oracle projects.
 
 Now that seems that we have everything in place, we can start to open Eclipse
 and start typing the code that will replace the spreadsheet. But this will be
@@ -409,6 +417,8 @@ $("#eventForm").submit(function() {
 \end{lstlisting}
 
 \subsubsection{``Events list'' coding}
+\label{sec:eventlist}
+
 This part of the view requires more presentation code, and also to
 implement the rest of the actions: update and delete.
 
