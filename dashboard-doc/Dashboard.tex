@@ -180,21 +180,26 @@
 % PFC 
 %
 \begin{document}
-
-\inputencoding{latin1}
 \clearpage\thispagestyle{empty}
 
 \begin{framed}
-\center{Universitat de Lleida}\\
-\center{Escola Politècnica Superior}\\
-\center{Enginyeria en Informàtica}\\ 
-\center{Sistemes informàtics (Treball de final de carrera)}\\
-\textbf{Dashboard: Track, analyze and decide}\\
+	\begin{center}
+	Universitat de Lleida \\ \medskip
+	Escola Politècnica Superior \\ \medskip
+	Enginyeria en Informàtica \\ \bigskip \bigskip
+	
+	Sistemes informàtics (Treball de final de carrera) \\ \bigskip \bigskip 
+	
+	\textbf{Dashboard: Track, analyze and decide}
+	\end{center}
 
-\raggedleft
-Autor/a: Héctor López\\
-Director/a: Roberto García i Juan Manuel Gimeno Illa\\
-Setembre de 2014
+	\bigskip
+	
+	\raggedleft
+	Autor/a: Héctor López Sacanell\\
+	Director/a: Roberto García i Juan Manuel Gimeno\\
+	Setembre de 2014
+	\bigskip
 \end{framed}
 
 \title{Dashboard: Track, analyze and decide}
@@ -218,17 +223,99 @@ A Silvia :)
 % \chapter*{Acknowledgments}
 % \addcontentsline{toc}{chapter}{Acknowledgments}
 
-TBD \\
-
 \chapter*{Source Code}
 \addcontentsline{toc}{chapter}{Source Code}
 All code has been pushed to \url{https://github.com/beldog/dashboard}
 repository, as well this document under \url{https://github.com/beldog/dashboard-doc} repository.
 
+\chapter*{Motivation}
+\addcontentsline{toc}{chapter}{Motivation}
+In order to track and follow up project's status, my colleagues and I
+built, on 2013, a simple tool in a spreadsheet that linked with a database that
+allowed us to log each change (aka \emph{event}) on the project status of on
+the following scope: phase change end/start, delay, launch.
+
+This tool also gave us a good view about different selected KPI \footnote{Key
+Performance Indicator}. And based on those indicators some reports can be
+built:
+Project's events, Project's launched, Project's delayed (and detail), Project's
+Gantt and Project's timelines.
+
+The tool was fine for a while, but it took too much time to load all data
+from the database, and also was not fully accessible for all users, because
+of the need to install some extra required components like the ODBC for those with
+Windows, or not even compatible with those using Linux computers, because the
+tool was built on Microsoft Excel.
+
+So, imagine trying to track project's \emph{events} on a tool that is slow
+and not compatible with everybody. At the end we stopped using it.
+
+Then, a fresh motivation came up to build something better,
+usable for all required users and faster enough to aim the objective: track,
+analyze and decide. 
+
+The challenge was both there and as well the information on the database, so it
+was just a matter to migrate the spreadsheet (the view) to a HTML page with some JS,
+as first client, so we decouple it from any need of 3rd party component such as
+ODBC, having in the middle a RESTful service that
+controls the communication between the client (web browser) and what matters,
+the data (our business).
+
+\chapter*{Planning}
+\addcontentsline{toc}{chapter}{Planning}
+Now that you know what is the main objective, next step is to break it down in
+smaller parts and assign timeframes for them.
+
+Three different phases has been defined:
+\begin{itemize}
+	\item Phase 1: Migrate current spreadsheet dashboard to simple REST +
+	HTML/JS
+	\item Phase 2: Implement Dashboard view with HTLM5/CSS3/JS
+	\item Phase 3: Automate dependencies linking Dashboard with 3rd ticketing
+	tool
+\end{itemize}
+
+Moreover, this project was forecasted as a 6 month project but extendend on
+the time to 9 months as the time expected to be invested per day is half
+working day top. So baseline timelines as follow: 
+
+\begin{figure}[ht!]
+	\centering
+   	\includegraphics[width=1\textwidth]{./resources/planning_baseline.png}
+   	\caption{Planning Baseline}
+   	\label{f_planning_baseline}
+\end{figure}
+
+And main process followed has been the \emph{Lean approach}, where we have
+dedicated part time of the time to get documented on new frameworks or APIs
+enclosed on the project's topic, and as soon as we learnt about the new
+technology, then we build a small piece of the final tool, so we can see and
+check out how it performs.
+
+But life has always time for surprises and good presents, so mentioned timelines
+were badly impacted because of two main reasons: \emph{I became a father} and
+\emph{I was promoted at work}. Be a father is one of the most wonderful things
+I have ever lived, but has its own contraindications, like any plan that you
+built before the birth gets automatically outdated. And this is what happened
+with the plan shown above. So we ended with the following timelines: 
+
+\begin{figure}[ht!]
+	\centering
+   	\includegraphics[width=1\textwidth]{./resources/planning_sep2014.png}
+   	\caption{Final Timelines}
+   	\label{f_planning_final}
+\end{figure}
+
+As you can see, Phase 1 has been delayed for almost 5 months. Of course those 5
+months has not been 0\% investment, but the productivity on this period got
+almost 2-5\%.
+
+Once Phase 1 was fineshed (middle June\/2014), a replanning was required, and
+the ouput was to cancelled Phase 3.
+
 %
 % Chapters
 %
-
 \input{Dashboard_PhaseOne.tex}
 \input{Dashboard_PhaseTwo.tex}
 \input{Dashboard_PhaseThree.tex}

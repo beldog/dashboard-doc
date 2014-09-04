@@ -1,36 +1,3 @@
-\chapter*{Motivation}
-\addcontentsline{toc}{chapter}{Motivation}
-In order to track and follow up project's status, my colleagues and I
-built, on 2013, a simple tool in a spreadsheet that linked with a database that
-allowed us to log each change (aka \emph{event}) on the project status of on
-the following scope: phase change end/start, delay, launch.
-
-This tool also gave us a good view about different selected KPI \footnote{Key
-Performance Indicator}. And based on those indicators some reports can be
-built:
-Project's events, Project's launched, Project's delayed (and detail), Project's
-Gantt and Project's timelines.
-
-The tool was fine for a while, but it took too much time to load all data
-from the database, and also was not fully accessible for all users, because
-of the need to install some extra required components like the ODBC for those with
-Windows, or not even compatible with those using Linux computers, because the
-tool was built on Microsoft Excel.
-
-So, imagine trying to track project's \emph{events} on a tool that is slow
-and not compatible with everybody. At the end we stopped using it.
-
-Then, a fresh motivation came up to build something better,
-usable for all required users and faster enough to aim the objective: track,
-analyze and decide. 
-
-The challenge was both there and as well the information on the database, so it
-was just a matter to migrate the spreadsheet (the view) to a HTML page with some JS,
-as first client, so we decouple it from any need of 3rd party component such as
-ODBC, having in the middle a RESTful service that
-controls the communication between the client (web browser) and what matters,
-the data (our business).
-
 \part{Migrate Excel spreadsheet dashboard to a simple REST+HTML/JS
 application}
 \label{c_phaseone}
