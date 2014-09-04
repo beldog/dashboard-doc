@@ -23,7 +23,7 @@
 \usepackage{listings}			%Sourcecode
 \usepackage[toc,page]{appendix}
 \usepackage{color}
-
+\usepackage{framed}
 
 \definecolor{codegreen}{rgb}{0,0.6,0}
 \definecolor{codegray}{rgb}{0.5,0.5,0.5}
@@ -182,12 +182,27 @@
 \begin{document}
 
 \inputencoding{latin1}
+\clearpage\thispagestyle{empty}
+
+\begin{framed}
+\center{Universitat de Lleida}\\
+\center{Escola Politècnica Superior}\\
+\center{Enginyeria en Informàtica}\\ 
+\center{Sistemes informàtics (Treball de final de carrera)}\\
+\textbf{Dashboard: Track, analyze and decide}\\
+
+\raggedleft
+Autor/a: Héctor López\\
+Director/a: Roberto García i Juan Manuel Gimeno Illa\\
+Setembre de 2014
+\end{framed}
+
 \title{Dashboard: Track, analyze and decide}
 \author{Héctor López}
 \inputencoding{utf8}
 
 \date{\today}
-\maketitle
+%\maketitle
 
 \begin{dedication}
 A Silvia :)
@@ -207,8 +222,8 @@ TBD \\
 
 \chapter*{Source Code}
 \addcontentsline{toc}{chapter}{Source Code}
-All code is push to \url{https://github.com/beldog/dashboard} repositry, as well
-this document under \url{https://github.com/beldog/dashboard-doc} repository.
+All code has been pushed to \url{https://github.com/beldog/dashboard}
+repository, as well this document under \url{https://github.com/beldog/dashboard-doc} repository.
 
 %
 % Chapters
@@ -216,7 +231,7 @@ this document under \url{https://github.com/beldog/dashboard-doc} repository.
 
 \input{Dashboard_PhaseOne.tex}
 \input{Dashboard_PhaseTwo.tex}
-% \input{Dashboard_PhaseThree.tex}
+\input{Dashboard_PhaseThree.tex}
 
 
 \begin{thebibliography}{1}

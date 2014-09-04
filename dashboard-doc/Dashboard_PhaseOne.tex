@@ -1,16 +1,17 @@
 \chapter*{Motivation}
 \addcontentsline{toc}{chapter}{Motivation}
 In order to track and follow up project's status, my colleagues and I
-built, on 2013, a simple tool in a spreadsheet that linked with a database
-allowed us to log each change (aka \emph{event}) on the project status on the following scope: phase change
-end/start, delay, launch.
+built, on 2013, a simple tool in a spreadsheet that linked with a database that
+allowed us to log each change (aka \emph{event}) on the project status of on
+the following scope: phase change end/start, delay, launch.
 
 This tool also gave us a good view about different selected KPI \footnote{Key
-Performance Indicator}. And based on those indicators we built some reports:
-Project's events, Projects launched, Projects delayed (and detail), Projects
+Performance Indicator}. And based on those indicators some reports can be
+built:
+Project's events, Project's launched, Project's delayed (and detail), Project's
 Gantt and Project's timelines.
 
-The tool was fine for a while, but it took to much time to load all data
+The tool was fine for a while, but it took too much time to load all data
 from the database, and also was not fully accessible for all users, because
 of the need to install some extra required components like the ODBC for those with
 Windows, or not even compatible with those using Linux computers, because the
@@ -23,8 +24,8 @@ Then, a fresh motivation came up to build something better,
 usable for all required users and faster enough to aim the objective: track,
 analyze and decide. 
 
-The challenge was there and as well the information on the database, so it was
-just a matter to migrate the spreadsheet (the view) to a HTML page with some JS,
+The challenge was both there and as well the information on the database, so it
+was just a matter to migrate the spreadsheet (the view) to a HTML page with some JS,
 as first client, so we decouple it from any need of 3rd party component such as
 ODBC, having in the middle a RESTful service that
 controls the communication between the client (web browser) and what matters,
@@ -69,7 +70,7 @@ You can see the relationship between above listed components on the
 \end{figure}
 
 \section{Database model}
-Database model was defined as simple as possible, keeping in mind
+The database model was defined as simple as possible, keeping in mind
 possible normalization in the future without having a big impact on the data. So
 decision was to use
 \emph{Enum}\footnote{\url{https://dev.mysql.com/doc/refman/5.0/en/enum.html}}
@@ -84,7 +85,7 @@ elements like: country, project\_type or  type fields
    	\label{f_data_model}
 \end{figure}
 
-The most relevant field here is \emph{type}, where covers all required possible
+The most relevant field here is \emph{type}, which covers all required possible
 scenarios in a project's lifetime that we needed to track. And base on that, 
 reports (views) can show the specific information to be analyzed.
 
@@ -156,17 +157,17 @@ the objective remained the same and only is needed to change the  view with a
 more powerful or friendly one. See an example on
 \ref{f_report_launchesbymonth}, where ``Amount of Launches by Month'' query 
 is defined, querying the main table \texttt{pm\_project\_event}, grouping and
-counting by launch's year-month, country and project_type.
+counting by launch's year-month, country and project\_type.
 
 \lstinputlisting[style=sql,caption=Launches\ by\ month\ view,label=f_report_launchesbymonth]{resources/report_launchesbymonth.sql}
 
-In the other hand, decoupling it will need to be taken up sooner or later if
-we want to have a flexible and scalable tool, but this will be part of the
+On the other hand, decoupling it will be needed to be taken care sooner or
+later if we want to have a flexible and scalable tool, but this will be part of the
 future work.
 
 \section{The issue and what to improve}
 As slightly tackled on previous sections, building a reporting tool based on
-Excel was not the better solution, but it covered the main needs, even if we
+Excel was not the best solution, but it covered the main needs, even if we
 faced issues like slowness, a single shared spreadsheet to be used by all
 project managers, every report had a standalone database connection with the
 possible impact on resources it could have a manual database insert per
@@ -203,8 +204,7 @@ Why online? Because today everything is connected and you can interact with
 almost everything, and why not with the status of a project? Also, if you are
 not connected, you are not cool and very unuseful, and we wanted to have a
 useful tool, and why not, also have a cool tool!  On top of that, objective is
-challenging, so better to go for a lean approach
-\footnote{\url{http://en.wikipedia.org/wiki/Lean\_software\_development}} and
+challenging, so better to go for a lean approach\footnote{\url{http://en.wikipedia.org/wiki/Lean\_software\_development}} and
 deliver small pieces with the enough functionality even if they are not covering
 the final objective. So, following this approach the first target was to have
 a simple view of what we are managing here, projects and dates. So using Google
@@ -226,9 +226,8 @@ Because it provides a big amount of possible frameworks and technologies to
 use or plug in and also maybe because we am more familiar and confident
 with it.
 
-Within the big umbrella of available Java servers
-\footnote{\url{http://en.wikipedia.org/wiki/Comparison\_of\_application\_servers\#Java}},
-we found Jersey \footnote{\url{https://jersey.java.net/}}, a
+Within the big umbrella of available Java servers\footnote{\url{http://en.wikipedia.org/wiki/Comparison\_of\_application\_servers\#Java}},
+we found Jersey\footnote{\url{https://jersey.java.net/}}, a
 RESTful framework implemented in Java, that covers the following
 requirements:
 \begin{itemize}
@@ -245,8 +244,7 @@ RESTEasy\footnote{\url{http://resteasy.jboss.org/}}. All three options fit our
 needs, but we decided to use Jersey just to try it, but all three (and others)
 frameworks are good enough so far, so we just needed to pick one and try it.
 
-A part of the REST framework, we also found too Grizzly
-\footnote{\url{https://grizzly.java.net/}} as a Server application, that will
+A part of the REST framework, we also found too Grizzly\footnote{\url{https://grizzly.java.net/}} as a Server application, that will
 provide to or tool a better scalable future in case we need it taking
 advantage of Java NIO\footnote{\url{https://www.jcp.org/en/jsr/detail?id=51}}.
 Both Jersey and Grizzly are Oracle projects.
@@ -258,19 +256,19 @@ part of the migration plan described on the following chapter.
 \chapter{Migration}
 Do not forget that the target is to deliver a \emph{simple} tool that replaces
 current Excel, so the migration will start developing the minimum code in order
-to add, update and delete project's events and also provides the same
+to add, update and delete project's events and also provide the same
 information that currently to the view in order to show it.
 
-Considering also that we are not familiar with Grizzly and Jersey, first thing
-will be to deploy a very simple server and REST application, using the examples,
-in order to understand the logic and the process. You can find all the
+Considering also that we are not familiar with Grizzly and Jersey, the first
+thing we will need to deploy is a very simple server and REST application,
+using the examples, in order to understand the logic and the process. You can find all the
 information on the project web page as well the tutorials and the examples that
 will drive and help you on few typical scenarios, but see on the next section a
 brief introduction about how to start with it.
 
 \section{Starting with Grizzly and Jersey}
 First thing you need to do is to create an empty server example using Maven,
-as described on \ref{f_setup_grizzlyjersey} where maven generates a new
+as described on Listing \ref{f_setup_grizzlyjersey} where maven generates a new
 project based on the indicated archetype, in our case based on artifact
 \texttt{jersey-quickstart-grizzly2} on group
 \texttt{org.glassfish.jersey.archetypes} and we just need to specify our own
@@ -282,7 +280,7 @@ working environment (it requires to have been setup the pom.xml file with the re
 $ mvn archetype:generate -DarchetypeArtifactId=jersey-quickstart-grizzly2 -DarchetypeGroupId=org.glassfish.jersey.archetypes -DinteractiveMode=false -DgroupId=net.nuevegen.dashboard -DartifactId=dashboard -Dpackage=net.nuevegen.dashboard 
 \end{lstlisting}
 
-Once the command is ran, a simple test project will be created containing the
+Once the command is run, a simple test project will be created containing the
 files structure and also the required classes, just three main ones: 
 \begin{itemize}
   \item Server daemon class that starts Grizzly with Jersey framework
@@ -299,7 +297,7 @@ Main methods will be defined under
 the definition and implementation of all reports available, and covering as well
 the addition and remove event's actions. 
 
-So just in order to exemplify how easy is the implementation of a REST method
+So just in order to exemplify how easy the implementation of a REST method is,
 see getTimelinesByProjects method that fits with the implementation required to
 show \ref{f_report_timelines}.\\
 
@@ -311,9 +309,8 @@ show \ref{f_report_timelines}.\\
 public Response getTimelinesByProject(@PathParam("id") String id) {
 	Response response = null;
 	List<Timeline> timelines = new LinkedList<Timeline>(); 
-
 	...
-	
+
 	String query = "SELECT * FROM ukint_project_timelines_reports WHERE 1 ";
 
 	if (id != null && id.trim().length()>0){
@@ -322,12 +319,10 @@ public Response getTimelinesByProject(@PathParam("id") String id) {
 	
 	st = Dashboard.getConnection(false).prepareStatement(query);
 	rs = st.executeQuery();
-	
 	...
 	
 	GenericEntity<List<Timeline>> entity = new GenericEntity<List<Timeline>>(timelines) {};
 	response = Response.ok(entity).build();
-	
 	...
 	
 	return response;
@@ -347,11 +342,11 @@ list of entities read from the database, but we can return any other kind of
 standard HTTP error code.
 
 \section{Implementing the view}
-Now is time to implement the appropriate code on the view (aka client) in order
-to show the mentioned reports and send and process all required actions with
+Now it is time to implement the appropriate code on the view (aka client) in
+order to show the mentioned reports and send and process all required actions with
 the built REST server. As mentioned on previous chapters, the objective to aim
-is to migrate and no need to have a nice client, but friendly enough in order to
-not lose the focus on the functionality. So, the implementation chosen at this
+is to migrate and no need to have a nice client, but friendly enough in order
+not to lose the focus on the functionality. So, the implementation chosen at this
 time is as simplest as possible using HTML, CSS and JS. This will be rewritten
 and improved on following phases.
 
@@ -371,7 +366,7 @@ Main logic of this standard form is:
   \item Load last event informed: Once the user enter the project ID on the
   form, the tool looks for the latest entry on the project, if it is found
   (could be the first one so no previous entry will found) then it prefills all
-  remaining fields with the information stored on the database, so the owner of
+  remaining fields with the information stored in the database, so the owner of
   the information needs only to update  the relevant detail, usually updating
   the timelines field and the description of the event.
   \item Add new event: Once the form is filled, it is sent via asynchronous call
@@ -424,7 +419,7 @@ implement the rest of the actions: update and delete.
 
 Following the approach to build it as simple as possible, the code implemented
 has been using \texttt{table} tags and a mechanism to build dynamically (via
-jquery) the events list. 
+jQuery) the events list. 
 
 At this point, we know already that we will need to use a similar logic to build
 the rest of the reports that show a list of details including an action, so the
@@ -456,9 +451,8 @@ party framework to show in a colorful way project's timelines so the Project
 Manager can have a quick view of what is going on, and what projects are getting
 stuck.
 
-After expend some time looking for a framework that covers all the needs, or at
-least most of them, we found Google Charts API
-\footnote{\url{https://google-developers.appspot.com/chart/interactive/docs/gallery/timeline}},
+After expending some time looking for a framework that covers all the needs, or
+at least most of them, we found Google Charts API\footnote{\url{https://google-developers.appspot.com/chart/interactive/docs/gallery/timeline}},
 that provides a wide variety of charts. And one of them is the \emph{Timeline}
 one, perfect for the required report.
 
@@ -487,28 +481,6 @@ result:
    	\caption{http://dasboard.buongiorno.com}
    	\label{f_dashboard}
 \end{figure}
-
-\chapter{Conclusions and Future work}
-There is a wide variety of ways to do the same thing, also frameworks and
-technologies to use. The ones used until now on this project are just an example
-of the technologies that fits the project needs but it doesn't mean they are the best
-ones, but at least covers the main objective being compliance with it in a
-short-mid term. But, as technology changes every day, the most important part is
-to isolate (or decouple) your main business logic out of the technology used.
-So, if in the future you are force to change the ecosystem, at least you can ensure your
-logic will not change drastically and you can migrate it from one system to
-another.\\
-
-We left out of this part improvements and things to do better, but they will be
-covered on future work. Things like:
-
-\begin{itemize}
-	\item Refactor database connectivity using a proper JPA based framework\footnote{Java Persistence API:
-	\url{http://www.oracle.com/technetwork/articles/javaee/jpa-137156.html}}.
-	\item Remove data-format coupling returned to the client.
-	\item Refactor client making it usable for the final user (requires assessment
-	and evaluation of main actions to carry out by the user and role).
-\end{itemize}
 
 %\begin{appendices}
 %\chapter{Table views reports}

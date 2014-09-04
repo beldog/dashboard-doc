@@ -21,7 +21,7 @@ you cover the required features to build a web tool in a
 single page and/or have responsive mobile web implementation using the latest
 CSS3 and Saas extension, like Compass.
 
-I started applying Bootstrap to the dashboard in a very straight forward way and
+I started applying Bootstrap to the dashboard in a very straightforward way and
 getting awesome results a couple of hours later.
 
 First thing to do is to import required libraries, such as main style sheet,
@@ -83,14 +83,14 @@ At this stage the first thing we do is to review the API looking for a
 extend or move an event, as well as change their inherent properties like event
 type or description.
 
-The main issue we face is Google charts doesn't allow any interaction on the
-elements shown, as they are the result of the data already processed, so if we
+The main issue we faced was that Google chart doesn't allow any interaction on
+the elements shown, as they are the result of the data already processed, so if we
 want to update it we need to update the data and refresh it. But, instead allows
 us to customize the \emph{tooltip} object, being able to add an \emph{action},
 where we could implement the logic we want
 somehow\footnote{\url{https://developers.google.com/chart/interactive/docs/customizing_tooltip_content?hl=es#tooltip_actions}}.
 
-After try it few times on our Timeline chart and read carefully the
+After trying it few times on our Timeline chart and read carefully the
 documentation, turns out this Tooltip feature is not available for our specific
 type of chart. Also there is open an issue requesting the same logic on
 timelines chart
@@ -120,10 +120,10 @@ rest of the resources included on the zip file, we proceed to adapt our data to
 the new chart.
 
 As mentioned before, this library is compatible with Google Visualization
-Chart, that means that we can use \texttt{var dataTable = new
-google.visualization.DataTable();} objects to define the data, in the same way
-than before, the only small change we need to do is to rename column names based
-on the on the new library API as shown on the
+Chart, that means that we can use \texttt{google.visualization.DataTable}
+objects to define the data, in the same way  than before, the only small change
+we need to do is to rename column names based  on the on the new library API as
+shown on the 
 \reffigure{f_interactivetimelines_code}
 
 \begin{lstlisting}[language=Javascript,breaklines=true,caption=CHAP\ Link\
@@ -212,7 +212,7 @@ var onchanged = function (event) {
 google.visualization.events.addListener(timeline, 'changed', onchanged);
 \end{lstlisting} 
 
-Note, that the code implemented and shown on \ref{f_interactivetimelines_onchange_code} is not 100\% correct, as
+Note that the code implemented and shown on \ref{f_interactivetimelines_onchange_code} is not 100\% correct, as
 it is using static values, while they should be dynamic ones (like \texttt{project\_type} or
 \texttt{type}), and \texttt{timelines} value should be process and well informed
 based on original event. But it will be solved on the future work, as it will
@@ -232,25 +232,3 @@ only aware about the final result (start date and end date).
 % Don't know where it will end, but let's see and have fun with it along the
 % process.
 
-\chapter{Conclusions and Future work}
-Building a tool usually requires significant time for coding what you have
-defined on the Use/Business cases, but a major part of the time is also used to
-assess and evaluate which tools/frameworks provide the open source community
-that could be reused and fit on your own project. This investment on reusing
-components from 3rd is a common practise and it will safe value time that you
-could invest on other tasks. 
-In the same way that reusing Bootstrap or Google
-Charts provides a good result without any need to invest time on coding it from
-scratch rather than read the API.\\
-
-
-We left out of this part improvements and things to do better, but they will be
-covered on future work. Things like:
-
-\begin{itemize}
-	\item Implement rest of listeners and actions required on CHAP Links Timeline
-	chart to build a full interactive chart.
-	\item Automate dependencies linking projects with 3rd ticketing tools.
-	\item Define and implement a performance and evaluation system able to detect
-	risk, and calculate&evaluate main KPIs.
-\end{itemize}

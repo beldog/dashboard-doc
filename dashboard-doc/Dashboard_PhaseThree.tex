@@ -1,5 +1,45 @@
-\part{Phase Three: Automate dependencies linking Dashboard with 3rd ticketing
-tools (read/write). Tools like Trello, RT, sharepoint}
+\part{Conclusions and Future work}
 
 %\chapter{Introduction}
 %\label{c_phasethree}
+
+
+\chapter{Conclusions}
+There is a wide variety of ways to do the same thing, also frameworks and
+technologies to use. The ones used until now on this project are just an example
+of the technologies that fits the project needs but it doesn't mean they are the best
+ones, but at least covers the main objective being compliance with it in a
+short-mid term. But, as technology changes every day, the most important part is
+to isolate (or decouple) your main business logic out of the technology used.
+So, if in the future you are force to change the ecosystem, at least you can ensure your
+logic will not change drastically and you can migrate it from one system to
+another.\\
+
+Building a tool usually requires significant time for coding what you have
+defined on the Use/Business cases, but a major part of the time is also used to
+assess and evaluate which tools/frameworks provide the open source community
+that could be reused and fit on your own project. This investment on reusing
+components from 3rd is a common practise and it will safe value time that you
+could invest on other tasks. 
+In the same way that reusing Bootstrap or Google
+Charts provides a good result without any need to invest time on coding it from
+scratch rather than read the API.\\
+
+\chapter{Future work}
+We left out of this part improvements and things to do better, but they will be
+covered on future work. Things like:
+
+
+\begin{itemize}
+	\item Refactor database connectivity using a proper JPA based framework\footnote{Java Persistence API:
+	\url{http://www.oracle.com/technetwork/articles/javaee/jpa-137156.html}}.
+	\item Remove data-format coupling returned to the client.
+	\item Refactor client making it usable for the final user (requires assessment
+	and evaluation of main actions to carry out by the user and role).
+	\item Implement rest of listeners and actions required on CHAP Links Timeline
+	chart to build a full interactive chart.
+	\item Automate dependencies linking projects with 3rd ticketing tools.
+	\item Define and implement a performance and evaluation system able to detect
+	risk, and calculate&evaluate main KPIs.
+\end{itemize}
+
