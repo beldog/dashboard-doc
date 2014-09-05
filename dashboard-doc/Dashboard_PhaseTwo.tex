@@ -11,8 +11,6 @@ is the successful one.
 \chapter{Facelift with Bootstrap}
 There are few front end frameworks that help the web developer to build a
 consistent, usable and responsive web, such as
-Backbone\footnote{\url{http://backbonejs.or}}, 
-Underscore\footnote{\url{http://underscorejs.org/}},
 Skeleton\footnote{\url{http://www.getskeleton.com/}},
 Foundation\footnote{\url{http://foundation.zurb.com/}},
 Compass\footnote{\url{http://compass-style.org/}},
@@ -20,6 +18,12 @@ Bootstrap\footnote{\url{http://getbootstrap.com/}} and few others. With them
 you cover the required features to build a web tool in a
 single page and/or have responsive mobile web implementation using the latest
 CSS3 and Saas extension, like Compass.
+
+I also evaluated together a couple of frameworks that will help on the well code
+structure and architecture such us Backbone\footnote{\url{http://backbonejs.or}}
+and Underscore\footnote{\url{http://underscorejs.org/}}, but this will be left
+for a future work because currently the priority is to provide a coherent style
+to the user.
 
 I started applying Bootstrap to the dashboard in a very straightforward way and
 getting awesome results a couple of hours later.
@@ -179,7 +183,7 @@ we just implement a simple listener that creates a new Event informing the new
 dates. The way to do it is just bulding on code the form fields required and
 call the same method used on \reffigure{f_migration_addnewevent_jquery}, but
 refactored in order to be used by the form and by the chart.
-
+\newpage
 \begin{lstlisting}[language=Javascript,breaklines=true,caption=CHAP On\
 change\ event,label=f_interactivetimelines_onchange_code] 
 timeline = new links.Timeline(container);
