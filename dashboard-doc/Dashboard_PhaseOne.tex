@@ -132,7 +132,7 @@ On the other hand, decoupling it will be needed to be taken care sooner or
 later if we want to have a flexible and scalable tool, but this will be part of the
 future work.
 
-\section{The issue and what to improve}
+\section{Problems with this solution}
 As slightly tackled on previous sections, building a reporting tool based on
 Excel was not the best solution, but it covered the main needs, even if we
 faced issues like slowness, a single shared spreadsheet to be used by all
@@ -156,7 +156,7 @@ filters, but it could be managed in a second or third stage.
 Now the question is: what could be the best replacement?
 
 \section{Looking for a view replacement}
-We wanted to have a very light view and user friendly, something that
+We wanted to have a very light and user friendly views, something that
 provides directly the information to the user, a dashboard where the user could
 see in one single view all the information he wants to see.
 
@@ -170,8 +170,8 @@ dashboard\footnote{\url{https://developers.google.com/chart/}}.
 Why online? Because today everything is connected and you can interact with
 almost everything, and why not with the status of a project? Also, if you are
 not connected, you are not cool and very unuseful, and we wanted to have a
-useful tool, and why not, also have a cool tool!  On top of that, objective is
-challenging, so better to go for a lean approach\footnote{\url{http://en.wikipedia.org/wiki/Lean\_software\_development}} and
+useful tool, and why not, also have a cool tool!  On top of that, the objective
+is challenging, so better to go for a lean approach\footnote{\url{http://en.wikipedia.org/wiki/Lean\_software\_development}} and
 deliver small pieces with the enough functionality even if they are not covering
 the final objective. So, following this approach the first target was to have
 a simple view of what we are managing here, projects and dates. So using Google
